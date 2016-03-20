@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		64D153011C9F11AF0074ADB3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 64D153001C9F11AF0074ADB3 /* main.cpp */; };
+		64D153091C9F11D50074ADB3 /* EdgeDetect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 64D153071C9F11D50074ADB3 /* EdgeDetect.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,9 @@
 /* Begin PBXFileReference section */
 		64D152FD1C9F11AF0074ADB3 /* PAD */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PAD; sourceTree = BUILT_PRODUCTS_DIR; };
 		64D153001C9F11AF0074ADB3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		64D153071C9F11D50074ADB3 /* EdgeDetect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EdgeDetect.cpp; sourceTree = "<group>"; };
+		64D153081C9F11D50074ADB3 /* EdgeDetect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EdgeDetect.hpp; sourceTree = "<group>"; };
+		64D1530A1C9F14760074ADB3 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +45,7 @@
 		64D152F41C9F11AF0074ADB3 = {
 			isa = PBXGroup;
 			children = (
+				64D1530A1C9F14760074ADB3 /* .gitignore */,
 				64D152FF1C9F11AF0074ADB3 /* PAD */,
 				64D152FE1C9F11AF0074ADB3 /* Products */,
 			);
@@ -57,6 +62,8 @@
 		64D152FF1C9F11AF0074ADB3 /* PAD */ = {
 			isa = PBXGroup;
 			children = (
+				64D153081C9F11D50074ADB3 /* EdgeDetect.hpp */,
+				64D153071C9F11D50074ADB3 /* EdgeDetect.cpp */,
 				64D153001C9F11AF0074ADB3 /* main.cpp */,
 			);
 			path = PAD;
@@ -119,6 +126,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				64D153011C9F11AF0074ADB3 /* main.cpp in Sources */,
+				64D153091C9F11D50074ADB3 /* EdgeDetect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,9 +169,30 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lopencv_calib3d",
+					"-lopencv_core",
+					"-lopencv_features2d",
+					"-lopencv_flann",
+					"-lopencv_highgui",
+					"-lopencv_imgcodecs",
+					"-lopencv_imgproc",
+					"-lopencv_ml",
+					"-lopencv_objdetect",
+					"-lopencv_photo",
+					"-lopencv_shape",
+					"-lopencv_stitching",
+					"-lopencv_superres",
+					"-lopencv_ts",
+					"-lopencv_video",
+					"-lopencv_videoio",
+					"-lopencv_videostab",
+				);
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -198,8 +227,29 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-lopencv_calib3d",
+					"-lopencv_core",
+					"-lopencv_features2d",
+					"-lopencv_flann",
+					"-lopencv_highgui",
+					"-lopencv_imgcodecs",
+					"-lopencv_imgproc",
+					"-lopencv_ml",
+					"-lopencv_objdetect",
+					"-lopencv_photo",
+					"-lopencv_shape",
+					"-lopencv_stitching",
+					"-lopencv_superres",
+					"-lopencv_ts",
+					"-lopencv_video",
+					"-lopencv_videoio",
+					"-lopencv_videostab",
+				);
 				SDKROOT = macosx;
 			};
 			name = Release;
