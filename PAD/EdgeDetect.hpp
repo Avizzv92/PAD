@@ -5,10 +5,6 @@
 //  Created by Aaron Vizzini and WU Weibo on 20/03/2016.
 //
 
-#ifndef EdgeDetect_hpp
-
-#define EdgeDetect_hpp
-
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include <opencv2/highgui/highgui.hpp>
@@ -18,13 +14,11 @@ using namespace cv;
 
 class EdgeDetect {
 private:
-    static int scale;
-    static int delta;
-    static int ddepth;
+    static int const scale;
+    static int const delta;
+    static int const ddepth;
     
 public:
-    static Mat sobelEdgeDetect (Mat image);
-    static Mat cannyEdgeDetect (Mat image);
+    static void sobelEdgeDetect (Mat &image);
+    static void cannyEdgeDetect (Mat &image);
 };
-
-#endif

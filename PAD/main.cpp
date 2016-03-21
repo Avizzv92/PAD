@@ -32,12 +32,12 @@ int main(int argc, const char * argv[]) {
             cap>>image;
             
             //Canny Edge
-            //Mat edged = EdgeDetect::cannyEdgeDetect(image);
+            //EdgeDetect::cannyEdgeDetect(image);
             
             //Sobel Edge
-            Mat edged = EdgeDetect::sobelEdgeDetect(image);
+            EdgeDetect::sobelEdgeDetect(image);
             
-            imshow("window",edged);
+            imshow("window",image);
         } catch (Exception& e) {
             const char* err_msg = e.what();
             std::cout << "Exception caught : imshow:\n" << err_msg << std::endl;
