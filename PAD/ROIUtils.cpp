@@ -56,7 +56,7 @@ vector<Mat> ROIUtils::getROIMats(vector<roi> rois, Mat &image) {
         
         mats.push_back(submat);
         
-        imwrite("/Users/Vizzini/Desktop/image.png", submat);
+        //imwrite("/Users/Vizzini/Desktop/image.png", submat);
     }
     
     return mats;
