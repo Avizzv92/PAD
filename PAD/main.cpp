@@ -2,7 +2,7 @@
 //  main.cpp
 //  PAD
 //
-//  Created by Aaron Vizzini on 20/03/2016.
+//  Created by Wu Weibo on 20/03/2016.
 //  Copyright © 2016 ESIGELEC-IS. All rights reserved.
 //
 
