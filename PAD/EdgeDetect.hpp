@@ -2,7 +2,7 @@
 //  EdgeDetect.hpp
 //  PAD
 //
-//  Created by Aaron Vizzini and WU Weibo on 20/03/2016.
+//  Created by Aaron Vizzini & Wu Weibo on 20/03/2016.
 //
 
 #include <opencv/cv.h>
