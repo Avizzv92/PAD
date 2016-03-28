@@ -31,7 +31,7 @@ vector<roi> rois; //Holds all of the user defined regions of interest
 int clicks = 0; //Keeps track of mouse clicks to know what point is being assigned.
 Point one, two, three, four; //The points being given by the user to build the rois
 
-void CallBackFunc(int event, int x, int y, int flags, void* userdata) {
+void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
     //Create ROI
     if( event == EVENT_LBUTTONDOWN ) {
         clicks++;
@@ -96,7 +96,7 @@ int main(int argc, const char * argv[]) {
     
     //Create window with mouse callback
     namedWindow("window",1);
-    setMouseCallback("window", CallBackFunc, NULL);
+    setMouseCallback("window", MouseCallBack, NULL);
 
     cap>>videoFrame;
     
