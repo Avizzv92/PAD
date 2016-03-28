@@ -44,7 +44,7 @@ public:
         Inserts a new ROI into the database for a given parkingLotID (the parking lot it belongs to)
         The DB id is then assigned back to the newROI which until this point has no id
      */
-    void insertROI(roi &newROI, int parkingLotID);
+    void insertROI(roi &newROI);
    /*
         Delete a ROI by its id, from the DB
     */

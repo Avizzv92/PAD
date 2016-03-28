@@ -50,8 +50,8 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata) {
             insert.b = two;
             insert.c = three;
             insert.d = four;
-            
-            dbm.insertROI(insert, PARKING_LOT_ID);
+            insert.parking_lot_id = PARKING_LOT_ID;
+            dbm.insertROI(insert);
 
             rois.push_back(insert);
             

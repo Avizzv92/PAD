@@ -18,7 +18,7 @@ using namespace std;
 struct roi {
     int id;
     int parking_lot_id;
-    String description; //id - currently unused?
+    String description; //descriptive id - currently unused?
     Point a, b, c, d; //the four points that form this roi
     bool occupied = false; //whether or not this roi is considered occupied
     int whitePixelCount = 0; //number of white pixels in this roi

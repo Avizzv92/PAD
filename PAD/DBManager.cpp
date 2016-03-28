@@ -68,9 +68,9 @@ void DBManager::logOccupancy(int cameraID, vector<roi> rois) {
     }
 }
 
-void DBManager::insertROI(roi &newROI, int parkingLotID) {
+void DBManager::insertROI(roi &newROI) {
     string description = newROI.description.length() == 0 ? "''" : newROI.description;
-    string insert = "INSERT INTO PARKING_SPOT (parking_lot_id, pointA, pointB, pointC, pointD, isOccupied, description, threshold) VALUES ( " + to_string(parkingLotID) + ", PointFromText('POINT("+to_string(newROI.a.x)+" "+to_string(newROI.a.y)+")'), PointFromText('POINT("+to_string(newROI.b.x)+" "+to_string(newROI.b.y)+")'), PointFromText('POINT("+to_string(newROI.c.x)+" "+to_string(newROI.c.y)+")'), PointFromText('POINT("+to_string(newROI.d.x)+" "+to_string(newROI.d.y)+")'), "+to_string(newROI.occupied == true ? 1 : 0)+", "+ description +", " + to_string(newROI.whitePixelCount) + " );";
+    string insert = "INSERT INTO PARKING_SPOT (parking_lot_id, pointA, pointB, pointC, pointD, isOccupied, description, threshold) VALUES ( " + to_string(newROI.parking_lot_id) + ", PointFromText('POINT("+to_string(newROI.a.x)+" "+to_string(newROI.a.y)+")'), PointFromText('POINT("+to_string(newROI.b.x)+" "+to_string(newROI.b.y)+")'), PointFromText('POINT("+to_string(newROI.c.x)+" "+to_string(newROI.c.y)+")'), PointFromText('POINT("+to_string(newROI.d.x)+" "+to_string(newROI.d.y)+")'), "+to_string(newROI.occupied == true ? 1 : 0)+", "+ description +", " + to_string(newROI.whitePixelCount) + " );";
 
     MYSQL_RES *results = performQuery(conn, (char *)insert.c_str());
     mysql_free_result(results);
