@@ -17,9 +17,9 @@
 using namespace std;
 using namespace cv;
 
-const int CAMERA_ID = 1;
-const int PARKING_LOT_ID = 1;
-const int FRAME_DELAY = 1000;
+int CAMERA_ID = 1;
+int PARKING_LOT_ID = 1;
+const int FRAME_DELAY = 33;
 const int LOG_TIME = 1000*60*5;//5 mins
 
 DBManager dbm;
@@ -83,7 +83,23 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
     }
 }
 
+void handleArgs(int argc, const char * argv[]) {
+    if(argc > 0) {
+        if(argc == 3) {
+            CAMERA_ID = atoi(argv[1]);
+            PARKING_LOT_ID = atoi(argv[2]);
+            printf("CAMERA ID: %i \n", CAMERA_ID);
+            printf("PARKING LOT ID: %i \n", PARKING_LOT_ID);
+        } else {
+            printf("Default camera id '1' and default parking lot id '1') are being used.\nTo change these values pass in both the ids as arguments, first the camera id then the parking lot id.");
+        }
+    }
+}
+
 int main(int argc, const char * argv[]) {
+    
+    handleArgs(argc, argv);
+    
     //Get ROIs from the DB.
     rois = dbm.getROIs();
     int timeSinceLastLog = 0;
