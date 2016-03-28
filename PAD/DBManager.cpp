@@ -78,14 +78,12 @@ void DBManager::insertROI(roi &newROI) {
     MYSQL_RES *results2 = performQuery(conn, (char *)"SELECT LAST_INSERT_ID();");
     MYSQL_ROW row = mysql_fetch_row(results2);
     newROI.id = atoi(row[0]);
-    printf("Inserting %i \n",newROI.id );
     mysql_free_result(results2);
 }
 
 void DBManager::deleteROI(int id) {
     string deleteQuery = "DELETE FROM PARKING_SPOT WHERE id = " + to_string(id);
     MYSQL_RES *results = performQuery(conn, (char *)deleteQuery.c_str());
-    printf("Deleting %i \n",id);
     mysql_free_result(results);
 }
 
