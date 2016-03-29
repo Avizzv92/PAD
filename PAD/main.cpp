@@ -42,7 +42,7 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
             two = Point(x,y);
         } else if(clicks == 3){
             three = Point(x,y);
-        } else if(clicks == 4){
+        } else if(clicks == 4){//Create ROI
             four = Point(x,y);
             
             roi insert;
@@ -51,6 +51,14 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
             insert.c = three;
             insert.d = four;
             insert.parking_lot_id = PARKING_LOT_ID;
+            
+            vector<Point> contour;
+            contour.push_back(insert.a);
+            contour.push_back(insert.b);
+            contour.push_back(insert.c);
+            contour.push_back(insert.d);
+            insert.contour = contour;
+            
             dbm.insertROI(insert);
 
             rois.push_back(insert);
@@ -64,12 +72,8 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
 
         for(int i = 0; i < rois.size(); i++) {
             roi curr = rois[i];
-            vector<Point> contour;
-            contour.push_back(curr.a);
-            contour.push_back(curr.b);
-            contour.push_back(curr.c);
-            contour.push_back(curr.d);
-            if(pointPolygonTest(contour, Point(x,y), true) >= 0) {
+            
+            if(pointPolygonTest(curr.contour, Point(x,y), true) >= 0) {
                 indexToDelete = i;
                 break;
             }
