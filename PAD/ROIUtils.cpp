@@ -25,6 +25,8 @@ void ROIUtils::drawROIsOnImage(vector<roi> rois, Mat &image) {
         } else {
             polylines(image, &pts, &npts, 1, true, Scalar(0,0,255), 1, CV_AA, 0);
         }
+        //Display pixel count to the user.
+        putText(image, to_string(rois[i].whitePixelCount), rois[i].a, FONT_HERSHEY_PLAIN, 1.0, CV_RGB(255,255,255), 1.0);
     }
 }
 

@@ -22,6 +22,7 @@ struct roi {
     Point a, b, c, d; //the four points that form this roi
     bool occupied = false; //whether or not this roi is considered occupied
     int whitePixelCount = 0; //number of white pixels in this roi
+    int threshold = 0;
 };
 
 class ROIUtils {
