@@ -10,14 +10,8 @@
 
 void ROIUtils::drawROIsOnImage(vector<roi> rois, Mat &image) {
     for(int i = 0; i < rois.size(); i++) {
-        vector<Point> contour;
-        contour.push_back(rois[i].a);
-        contour.push_back(rois[i].b);
-        contour.push_back(rois[i].c);
-        contour.push_back(rois[i].d);
-    
-        const Point *pts = (const Point*) Mat(contour).data;
-        int npts = Mat(contour).rows;
+        const Point *pts = (const Point*) Mat(rois[i].contour).data;
+        int npts = Mat(rois[i].contour).rows;
     
         //Draw the region, green polygon means unoccupied, red means occupied.
         if(!rois[i].occupied) {
@@ -26,7 +20,7 @@ void ROIUtils::drawROIsOnImage(vector<roi> rois, Mat &image) {
             polylines(image, &pts, &npts, 1, true, Scalar(0,0,255), 1, CV_AA, 0);
         }
         
-        int totalPixels = contourArea(contour);
+        int totalPixels = contourArea(rois[i].contour);
         double percentCoverage = ((double)rois[i].whitePixelCount/(double)totalPixels)*100.0;
         
         stringstream ss;
@@ -45,15 +39,9 @@ vector<Mat> ROIUtils::getROIMats(vector<roi> rois, Mat &image) {
     for(int i = 0; i < rois.size(); i++) {
         Mat submat;
         
-        vector<Point> contour;
-        contour.push_back(rois[i].a);
-        contour.push_back(rois[i].b);
-        contour.push_back(rois[i].c);
-        contour.push_back(rois[i].d);
-        
         // Create Polygon from vertices
         vector<Point> ROI_Poly;
-        approxPolyDP(contour, ROI_Poly, 1.0, true);
+        approxPolyDP(rois[i].contour, ROI_Poly, 1.0, true);
         
         Mat mask = Mat::zeros( image.size(), image.type() );
         
@@ -80,6 +68,9 @@ void ROIUtils::setWhitePixelCounts(vector<Mat> mats, vector<roi> &rois) {
 
 void ROIUtils::whitePixelOccupied(vector<roi> &rois) {
     for(int i = 0; i < rois.size(); i++) {
-        rois[i].occupied = rois[i].whitePixelCount == WHITE_PIXEL_THRESHOLD ? false : true;
+        int totalPixels = contourArea(rois[i].contour);
+        double percentCoverage = ((double)rois[i].whitePixelCount/(double)totalPixels);
+        
+        rois[i].occupied = percentCoverage <= rois[i].threshold ? false : true;
     }
 }

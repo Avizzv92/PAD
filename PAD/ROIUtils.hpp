@@ -22,13 +22,14 @@ struct roi {
     Point a, b, c, d; //the four points that form this roi
     bool occupied = false; //whether or not this roi is considered occupied
     int whitePixelCount = 0; //number of white pixels in this roi
-    int threshold = 0;
+    double threshold = .05;
+    vector<Point> contour;
 };
 
 class ROIUtils {
 private:
     //If the white pixel count exceeds this threshold, the roi is occupied
-    static const int WHITE_PIXEL_THRESHOLD = 0;
+    //static const int WHITE_PIXEL_THRESHOLD = 0;
 public:
     //Draws ROIs as polygons on the image.
     static void drawROIsOnImage(vector<roi> rois, Mat &image);
