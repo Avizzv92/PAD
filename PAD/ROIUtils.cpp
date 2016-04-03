@@ -57,6 +57,15 @@ vector<Mat> ROIUtils::getROIMats(vector<roi> rois, Mat &image) {
     return mats;
 }
 
+void ROIUtils::setRedPixelCounts(vector<Mat> mats, vector<roi> &rois) {
+    for(int i = 0; i < mats.size(); i++) {
+        Mat mat = mats[i];
+        vector<Mat> rgbChannels;
+        split(mat, rgbChannels);
+        int redPixels = countNonZero(rgbChannels[0]);
+        rois[i].redPixelCount = redPixels;
+    }
+}
 
 void ROIUtils::setWhitePixelCounts(vector<Mat> mats, vector<roi> &rois) {
     for(int i = 0; i < mats.size(); i++) {
@@ -69,8 +78,11 @@ void ROIUtils::setWhitePixelCounts(vector<Mat> mats, vector<roi> &rois) {
 void ROIUtils::whitePixelOccupied(vector<roi> &rois) {
     for(int i = 0; i < rois.size(); i++) {
         int totalPixels = contourArea(rois[i].contour);
-        double percentCoverage = ((double)rois[i].whitePixelCount/(double)totalPixels);
+        double percentCoverageWhite = ((double)rois[i].whitePixelCount/(double)totalPixels);
+        double percentCoverageRed = ((double)rois[i].redPixelCount/(double)totalPixels);
         
-        rois[i].occupied = percentCoverage <= rois[i].threshold ? false : true;
+        if(percentCoverageRed <= RED_PIXEL_COVERAGE_THRESHOLD) {
+            rois[i].occupied = percentCoverageWhite <= rois[i].threshold ? false : true;
+        }
     }
 }
