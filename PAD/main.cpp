@@ -57,8 +57,6 @@ int main(int argc, const char * argv[]) {
     
     //Set up video capture
     VideoCapture cap;
-    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
-    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
     cap.open(0);
     
     //Create window with mouse callback
@@ -107,7 +105,6 @@ int main(int argc, const char * argv[]) {
             
             imshow("window", videoFrame);
             
-            
         } catch (Exception& e) {
             const char* err_msg = e.what();
             std::cout << "Exception caught : imshow:\n" << err_msg << std::endl;
@@ -119,7 +116,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-Ptr<BackgroundSubtractor> pMOG2 = createBackgroundSubtractorMOG2();
+Ptr<BackgroundSubtractor> pMOG2 = createBackgroundSubtractorMOG2(100, 16, false);
 
 Mat detectMotion(Mat originalFrame) {
     //If motion is detected it is drawn in red pixels

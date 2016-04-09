@@ -92,6 +92,10 @@ void DBManager::deleteROI(int id) {
     string deleteQuery = "DELETE FROM PARKING_SPOT WHERE id = " + to_string(id);
     MYSQL_RES *results = performQuery(conn, (char *)deleteQuery.c_str());
     mysql_free_result(results);
+    //Remove this ROI's logs too.
+    string deleteQuery2 = "DELETE FROM OCCUPANCY_LOG WHERE parking_spot_id = " + to_string(id);
+    MYSQL_RES *results2 = performQuery(conn, (char *)deleteQuery2.c_str());
+    mysql_free_result(results2);
 }
 
 DBManager::~DBManager(void)
