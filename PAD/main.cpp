@@ -15,6 +15,9 @@
 #include "DBManager.hpp"
 #include "opencv2/videoio.hpp"
 #include <opencv2/video.hpp>
+#include <curl/curl.h>
+#include <stdio.h>
+#include <thread>
 
 using namespace std;
 using namespace cv;
@@ -23,7 +26,7 @@ using namespace cv;
 int CAMERA_ID = 1;
 int PARKING_LOT_ID = 1;
 const int FRAME_DELAY = 33;
-const int LOG_TIME = 1000*60*5;//5 mins
+const int LOG_TIME = 1000*5;//5 mins
 
 DBManager dbm;
 
@@ -31,9 +34,10 @@ Mat videoFrame; //The current video frame being looked at
 Mat roisOverlay; //The overlap which draws the colored polygons for the rois
 vector<roi> rois; //Holds all of the user defined regions of interest
 
-void handleLogging();
+void handleLogging(Mat matToLog);
 void MouseCallBack(int event, int x, int y, int flags, void* userdata);
 Mat detectMotion(Mat originalFrame);
+void sendImageToServer(string fileName, string fileNameWExt);
 
 void handleArgs(int argc, const char * argv[]) {
     if(argc > 0) {
@@ -101,7 +105,7 @@ int main(int argc, const char * argv[]) {
             videoFrame += roisOverlay;//Add roi overlay mat
             videoFrame += motionMat;//Add motion detection mat
             
-            handleLogging();//Handle the logging aspect
+            handleLogging(originalFrame+roisOverlay);//Handle the logging aspect
             
             imshow("window", videoFrame);
             
@@ -136,13 +140,19 @@ Mat detectMotion(Mat originalFrame) {
 
 int timeSinceLastLog = 0;
 
-void handleLogging() {
+void handleLogging(Mat matToLog) {
     //Log occupancy information into the DB every 10 mins? Rarely would someone be in a parking spot for < 10 mins?
     timeSinceLastLog += FRAME_DELAY;
 
     if(timeSinceLastLog >= LOG_TIME) {
         timeSinceLastLog = 0;
         dbm.logOccupancy(CAMERA_ID, rois);
+        
+        string fileName = "logImg_"+to_string(PARKING_LOT_ID);
+        string fileNameWExt = "logImg_"+to_string(PARKING_LOT_ID)+".png";
+        imwrite(fileNameWExt, matToLog);
+        thread uploadThread(sendImageToServer, fileName, fileNameWExt);
+        uploadThread.join();
     }
 }
 
@@ -203,4 +213,24 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
             rois.erase(rois.begin() + indexToDelete);
         }
     }
+}
+
+void sendImageToServer(string fileName, string fileNameWExt) {
+    CURL *curl = curl_easy_init();
+    CURLcode res;
+    struct curl_httppost *post=NULL;
+    struct curl_httppost *last=NULL;
+    
+    if(curl) {
+        curl_formadd(&post, &last, CURLFORM_COPYNAME, "file", CURLFORM_FILE, (const char *)fileNameWExt.c_str(), CURLFORM_END);
+        curl_formadd(&post, &last, CURLFORM_COPYNAME, "name", CURLFORM_COPYCONTENTS, (const char *)fileName.c_str(), CURLFORM_END);
+        
+        curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8888/uploadImage.php");
+        curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
+        
+        res = curl_easy_perform(curl);
+        curl_formfree(post);
+    }
+    
+    curl_easy_cleanup(curl);
 }
