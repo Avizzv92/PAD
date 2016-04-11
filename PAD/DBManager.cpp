@@ -68,7 +68,7 @@ void DBManager::logOccupancy(int cameraID, vector<roi> rois) {
     
     for(int i = 0; i < rois.size(); i++) {
         roi curr = rois[i];
-        string insert = "INSERT INTO OCCUPANCY_LOG (camera_id, parking_spot_id, isOccupied) VALUES (" + to_string(cameraID) + " , " + to_string(curr.id) + "," + to_string(curr.occupied == true ? 1 : 0) + ") ;";
+        string insert = "INSERT INTO OCCUPANCY_LOG (camera_id, parking_spot_id, isOccupied, parking_lot_id) VALUES (" + to_string(cameraID) + " , " + to_string(curr.id) + "," + to_string(curr.occupied == true ? 1 : 0) + "," + to_string(curr.parking_lot_id) + ") ;";
     
         MYSQL_RES *results = performQuery(conn, (char *)insert.c_str());
         mysql_free_result(results);
