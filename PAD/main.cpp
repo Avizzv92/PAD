@@ -25,6 +25,11 @@ using namespace cv;
 //Predfined Values
 int CAMERA_ID = 1;
 int PARKING_LOT_ID = 1;
+
+//Logging Permissions
+string pKey = "570d34e1ab0109.67855404";//Test Key
+bool isValid = false;
+
 const int FRAME_DELAY = 33;
 const int LOG_TIME = 1000*5;//5 mins
 
@@ -38,16 +43,19 @@ void handleLogging(Mat matToLog);
 void MouseCallBack(int event, int x, int y, int flags, void* userdata);
 Mat detectMotion(Mat originalFrame);
 void sendImageToServer(string fileName, string fileNameWExt);
+void attemptToValidateLogging();
 
 void handleArgs(int argc, const char * argv[]) {
     if(argc > 0) {
-        if(argc == 3) {
+        if(argc == 4) {
             CAMERA_ID = atoi(argv[1]);
             PARKING_LOT_ID = atoi(argv[2]);
+            pKey = argv[3];
             printf("CAMERA ID: %i \n", CAMERA_ID);
             printf("PARKING LOT ID: %i \n", PARKING_LOT_ID);
+            printf("PRIVATE KEY: %s \n", pKey.c_str());
         } else {
-            printf("Default camera id '1' and default parking lot id '1') are being used.\nTo change these values pass in both the ids as arguments, first the camera id then the parking lot id.");
+            printf("Enter (in order) the camera id, parking lot id, and the private key.");
         }
     }
 }
@@ -55,6 +63,7 @@ void handleArgs(int argc, const char * argv[]) {
 int main(int argc, const char * argv[]) {
     
     handleArgs(argc, argv);
+    attemptToValidateLogging();
     
     //Get ROIs from the DB.
     rois = dbm.getROIs();
@@ -138,13 +147,14 @@ Mat detectMotion(Mat originalFrame) {
     return fgMaskMOG2;
 }
 
+//Handles logging actions
 int timeSinceLastLog = 0;
 
 void handleLogging(Mat matToLog) {
     //Log occupancy information into the DB every 10 mins? Rarely would someone be in a parking spot for < 10 mins?
     timeSinceLastLog += FRAME_DELAY;
 
-    if(timeSinceLastLog >= LOG_TIME) {
+    if(timeSinceLastLog >= LOG_TIME && isValid == true) {
         timeSinceLastLog = 0;
         dbm.logOccupancy(CAMERA_ID, rois);
         
@@ -215,6 +225,7 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
     }
 }
 
+//Send a single frame to the server for logging purposes (only one ever exists at a single time for a single parking lot)
 void sendImageToServer(string fileName, string fileNameWExt) {
     CURL *curl = curl_easy_init();
     CURLcode res;
@@ -233,4 +244,9 @@ void sendImageToServer(string fileName, string fileNameWExt) {
     }
     
     curl_easy_cleanup(curl);
+}
+
+//Determines whether or not the user supplied pKey is valid
+void attemptToValidateLogging() {
+   isValid = dbm.isValid(pKey);
 }
