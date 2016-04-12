@@ -55,7 +55,7 @@ void handleArgs(int argc, const char * argv[]) {
             printf("PARKING LOT ID: %i \n", PARKING_LOT_ID);
             printf("PRIVATE KEY: %s \n", pKey.c_str());
         } else {
-            printf("Enter (in order) the camera id, parking lot id, and the private key.");
+            printf("Enter in order the camera id (From Website), parking lot id (From Website), and the private key (From Website).");
         }
     }
 }
@@ -147,25 +147,6 @@ Mat detectMotion(Mat originalFrame) {
     return fgMaskMOG2;
 }
 
-//Handles logging actions
-int timeSinceLastLog = 0;
-
-void handleLogging(Mat matToLog) {
-    //Log occupancy information into the DB every 10 mins? Rarely would someone be in a parking spot for < 10 mins?
-    timeSinceLastLog += FRAME_DELAY;
-
-    if(timeSinceLastLog >= LOG_TIME && isValid == true) {
-        timeSinceLastLog = 0;
-        dbm.logOccupancy(CAMERA_ID, rois);
-        
-        string fileName = "logImg_"+to_string(PARKING_LOT_ID);
-        string fileNameWExt = "logImg_"+to_string(PARKING_LOT_ID)+".png";
-        imwrite(fileNameWExt, matToLog);
-        thread uploadThread(sendImageToServer, fileName, fileNameWExt);
-        uploadThread.join();
-    }
-}
-
 int clicks = 0; //Keeps track of mouse clicks to know what point is being assigned.
 Point one, two, three, four; //The points being given by the user to build the rois
 
@@ -225,6 +206,25 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
     }
 }
 
+//Handles logging actions
+int timeSinceLastLog = 0;
+
+void handleLogging(Mat matToLog) {
+    //Log occupancy information into the DB every 10 mins? Rarely would someone be in a parking spot for < 10 mins?
+    timeSinceLastLog += FRAME_DELAY;
+    
+    if(timeSinceLastLog >= LOG_TIME && isValid == true) {
+        timeSinceLastLog = 0;
+        dbm.logOccupancy(CAMERA_ID, rois);
+        
+        string fileName = "logImg_"+to_string(PARKING_LOT_ID);
+        string fileNameWExt = "logImg_"+to_string(PARKING_LOT_ID)+".png";
+        imwrite(fileNameWExt, matToLog);
+        thread uploadThread(sendImageToServer, fileName, fileNameWExt);
+        uploadThread.join();
+    }
+}
+
 //Send a single frame to the server for logging purposes (only one ever exists at a single time for a single parking lot)
 void sendImageToServer(string fileName, string fileNameWExt) {
     CURL *curl = curl_easy_init();
@@ -248,5 +248,5 @@ void sendImageToServer(string fileName, string fileNameWExt) {
 
 //Determines whether or not the user supplied pKey is valid
 void attemptToValidateLogging() {
-   isValid = dbm.isValid(pKey);
+   isValid = dbm.isValid(pKey, PARKING_LOT_ID);
 }

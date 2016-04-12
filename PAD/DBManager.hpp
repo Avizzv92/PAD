@@ -55,5 +55,5 @@ public:
     /*
      For logging, we need to make sure the supplied pKey is correct
      */
-    bool isValid(string pKey);
+    bool isValid(string pKey, int parking_lot_id);
 };

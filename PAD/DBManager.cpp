@@ -98,11 +98,11 @@ void DBManager::deleteROI(int id) {
     mysql_free_result(results2);
 }
 
-bool DBManager::isValid(string pKey) {
+bool DBManager::isValid(string pKey, int parking_lot_id) {
     MYSQL_RES *results;
     MYSQL_ROW row;
     
-    string qry = "SELECT * FROM parking_lot WHERE pKey = \"" + pKey + "\"";
+    string qry = "SELECT * FROM parking_lot WHERE pKey = \"" + pKey + "\" AND id = \"" + to_string(parking_lot_id) + "\"";
     results = performQuery(conn, (char *)qry.c_str());
 
     while ((row = mysql_fetch_row(results)) != NULL) {
