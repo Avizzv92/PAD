@@ -43,7 +43,7 @@ void handleLogging(Mat matToLog);
 void MouseCallBack(int event, int x, int y, int flags, void* userdata);
 Mat detectMotion(Mat originalFrame);
 void sendImageToServer(string fileName, string fileNameWExt);
-void attemptToValidateLogging();
+bool attemptToValidateWithServer();
 
 void handleArgs(int argc, const char * argv[]) {
     if(argc > 0) {
@@ -55,7 +55,7 @@ void handleArgs(int argc, const char * argv[]) {
             printf("PARKING LOT ID: %i \n", PARKING_LOT_ID);
             printf("PRIVATE KEY: %s \n", pKey.c_str());
         } else {
-            printf("Enter in order the camera id (From Website), parking lot id (From Website), and the private key (From Website).");
+            printf("Enter in order the camera id (From Website), parking lot id (From Website), and the private key (From Website).\n");
         }
     }
 }
@@ -63,7 +63,9 @@ void handleArgs(int argc, const char * argv[]) {
 int main(int argc, const char * argv[]) {
     
     handleArgs(argc, argv);
-    attemptToValidateLogging();
+    
+    //
+    if(attemptToValidateWithServer() != true){cout<<"Invalid IDs or Private Key"<<endl; return 0;}
     
     //Get ROIs from the DB.
     rois = dbm.getROIs();
@@ -213,7 +215,7 @@ void handleLogging(Mat matToLog) {
     //Log occupancy information into the DB every 10 mins? Rarely would someone be in a parking spot for < 10 mins?
     timeSinceLastLog += FRAME_DELAY;
     
-    if(timeSinceLastLog >= LOG_TIME && isValid == true) {
+    if(timeSinceLastLog >= LOG_TIME) {
         timeSinceLastLog = 0;
         dbm.logOccupancy(CAMERA_ID, rois);
         
@@ -247,6 +249,6 @@ void sendImageToServer(string fileName, string fileNameWExt) {
 }
 
 //Determines whether or not the user supplied pKey is valid
-void attemptToValidateLogging() {
-   isValid = dbm.isValid(pKey, PARKING_LOT_ID);
+bool attemptToValidateWithServer() {
+   return dbm.isValid(pKey, PARKING_LOT_ID);
 }
