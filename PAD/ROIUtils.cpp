@@ -26,7 +26,7 @@ void ROIUtils::drawROIsOnImage(vector<roi> rois, Mat &image) {
         stringstream ss;
         ss.precision(2);
         ss << percentCoverage;
-        string percentageString = ss.str() + "%";
+        string percentageString = "ID:" + to_string(rois[i].id) + " " + ss.str() + "%";
         
         //Display pixel count to the user.
         putText(image, percentageString, rois[i].a, FONT_HERSHEY_PLAIN, 1.0, CV_RGB(255,255,255), 1.0);
