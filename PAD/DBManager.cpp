@@ -15,6 +15,8 @@ DBManager::DBManager(void)
 
     if (!mysql_real_connect(conn, SERVER, USERNAME, PASSWORD, DB, PORT, NULL, 0)) {
             printf("Conection error : %s\n", mysql_error(conn));
+            printf("Verify connection settings and internet/server access, then restart the program.\n");
+            exit(1);
     }
 }
 

@@ -22,14 +22,12 @@
 using namespace std;
 using namespace cv;
 
-//Predfined Values
+//User Supplied Values (Test Values Below)
 int CAMERA_ID = 1;
 int PARKING_LOT_ID = 1;
+string pKey = "570d34e1ab0109.67855404";
 
-//Logging Permissions
-string pKey = "570d34e1ab0109.67855404";//Test Key
-bool isValid = false;
-
+//Const values hard coded.
 const int FRAME_DELAY = 33;
 const int LOG_TIME = 1000*5;//5 mins
 
@@ -43,7 +41,6 @@ void handleLogging(Mat matToLog);
 void MouseCallBack(int event, int x, int y, int flags, void* userdata);
 Mat detectMotion(Mat originalFrame);
 void sendImageToServer(string fileName, string fileNameWExt);
-bool attemptToValidateWithServer();
 
 void handleArgs(int argc, const char * argv[]) {
     if(argc > 0) {
@@ -64,15 +61,17 @@ int main(int argc, const char * argv[]) {
     
     handleArgs(argc, argv);
     
-    //
-    if(attemptToValidateWithServer() != true){cout<<"Invalid IDs or Private Key"<<endl; return 0;}
+    //Attempt to validate with the server using IDs and the pKey
+    if(dbm.isValid(pKey, PARKING_LOT_ID) != true){cout<<"Invalid IDs or Private Key"<<endl; return 1;}
     
     //Get ROIs from the DB.
     rois = dbm.getROIs();
     
     //Set up video capture
     VideoCapture cap;
-    cap.open(0);
+    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+    cap.open(1);
     
     //Create window with mouse callback
     namedWindow("window",1);
@@ -116,7 +115,7 @@ int main(int argc, const char * argv[]) {
             videoFrame += roisOverlay;//Add roi overlay mat
             videoFrame += motionMat;//Add motion detection mat
             
-            handleLogging(originalFrame+roisOverlay);//Handle the logging aspect
+            handleLogging(originalFrame+roisOverlay);//Handle the logging aspect (We want to show the user the original colored image + the overlayed ROIs
             
             imshow("window", videoFrame);
             
@@ -231,8 +230,8 @@ void handleLogging(Mat matToLog) {
 void sendImageToServer(string fileName, string fileNameWExt) {
     CURL *curl = curl_easy_init();
     CURLcode res;
-    struct curl_httppost *post=NULL;
-    struct curl_httppost *last=NULL;
+    struct curl_httppost *post= NULL;
+    struct curl_httppost *last= NULL;
     
     if(curl) {
         curl_formadd(&post, &last, CURLFORM_COPYNAME, "file", CURLFORM_FILE, (const char *)fileNameWExt.c_str(), CURLFORM_END);
@@ -246,9 +245,4 @@ void sendImageToServer(string fileName, string fileNameWExt) {
     }
     
     curl_easy_cleanup(curl);
-}
-
-//Determines whether or not the user supplied pKey is valid
-bool attemptToValidateWithServer() {
-   return dbm.isValid(pKey, PARKING_LOT_ID);
 }
