@@ -18,6 +18,7 @@
 #include <curl/curl.h>
 #include <stdio.h>
 #include <thread>
+#include <regex>
 
 using namespace std;
 using namespace cv;
@@ -48,6 +49,14 @@ void handleArgs(int argc, const char * argv[]) {
             CAMERA_ID = atoi(argv[1]);
             PARKING_LOT_ID = atoi(argv[2]);
             pKey = argv[3];
+            
+            //Make sure the key is formatted as we expect.
+            regex keyREGEX("^[a-zA-Z0-9.]*$");
+            if(regex_match(pKey,keyREGEX) == false || pKey.size() > 23) {
+                printf("Bad Private Key.\n");
+                exit(1);
+            }
+            
             printf("CAMERA ID: %i \n", CAMERA_ID);
             printf("PARKING LOT ID: %i \n", PARKING_LOT_ID);
             printf("PRIVATE KEY: %s \n", pKey.c_str());
@@ -71,7 +80,7 @@ int main(int argc, const char * argv[]) {
     VideoCapture cap;
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-    cap.open(1);
+    cap.open(0);
     
     //Create window with mouse callback
     namedWindow("window",1);
