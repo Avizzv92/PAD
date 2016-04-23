@@ -40,6 +40,14 @@ void EdgeDetect::sobelEdgeDetect (Mat &image) {
 //Canny Edge Detection
 void EdgeDetect::cannyEdgeDetect (Mat &image) {
     Mat edge;
-    Canny( image, edge, 50, 150, 3);
+    
+    //Using OpenCV's threshold method with CV_THRESH_BINARY and CV_THRESH_OTSU parameters for determining automatically the betst thresholds for canny edge detection.
+    Mat imageInGray, _garbageIMG;
+    cvtColor( image, imageInGray, CV_BGR2GRAY );
+    double otsuThreshold = threshold(imageInGray, _garbageIMG, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+    double thresholdHigh = otsuThreshold;
+    double thresholdLow = otsuThreshold * 0.5;
+    
+    Canny( image, edge, thresholdLow, thresholdHigh);
     edge.convertTo(image, CV_8U);
 }
