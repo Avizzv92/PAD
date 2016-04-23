@@ -40,7 +40,10 @@ void EdgeDetect::sobelEdgeDetect (Mat &image) {
 //Canny Edge Detection
 void EdgeDetect::cannyEdgeDetect (Mat &image) {
     Mat edge;
-    
+
+    //Keep/Remove ? TEST!
+    GaussianBlur( image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
+
     //Using OpenCV's threshold method with CV_THRESH_BINARY and CV_THRESH_OTSU parameters for determining automatically the betst thresholds for canny edge detection.
     Mat imageInGray, _garbageIMG;
     cvtColor( image, imageInGray, CV_BGR2GRAY );
@@ -48,6 +51,6 @@ void EdgeDetect::cannyEdgeDetect (Mat &image) {
     double thresholdHigh = otsuThreshold;
     double thresholdLow = otsuThreshold * 0.5;
     
-    Canny( image, edge, thresholdLow, thresholdHigh);
+    Canny( image, edge, thresholdLow, thresholdHigh); //Was 50, 150, 3);
     edge.convertTo(image, CV_8U);
 }
