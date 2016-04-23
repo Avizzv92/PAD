@@ -8,13 +8,13 @@
 
 #include "ROIUtils.hpp"
 
-void ROIUtils::drawROIsOnImage(vector<roi> rois, Mat &image) {
+void ROIUtils::drawROIsOnImage(vector<ROI> rois, Mat &image) {
     for(int i = 0; i < rois.size(); i++) {
         const Point *pts = (const Point*) Mat(rois[i].contour).data;
         int npts = Mat(rois[i].contour).rows;
     
         //Draw the region, green polygon means unoccupied, red means occupied.
-        if(!rois[i].occupied) {
+        if(!rois[i].getOccupied()) {
             polylines(image, &pts, &npts, 1, true, Scalar(0,255,0), 1, CV_AA, 0);
         } else {
             polylines(image, &pts, &npts, 1, true, Scalar(0,0,255), 1, CV_AA, 0);
@@ -33,7 +33,7 @@ void ROIUtils::drawROIsOnImage(vector<roi> rois, Mat &image) {
     }
 }
 
-vector<Mat> ROIUtils::getROIMats(vector<roi> rois, Mat &image) {
+vector<Mat> ROIUtils::getROIMats(vector<ROI> rois, Mat &image) {
     vector<Mat> mats;
     
     for(int i = 0; i < rois.size(); i++) {
@@ -57,7 +57,7 @@ vector<Mat> ROIUtils::getROIMats(vector<roi> rois, Mat &image) {
     return mats;
 }
 
-void ROIUtils::setRedPixelCounts(vector<Mat> mats, vector<roi> &rois) {
+void ROIUtils::setRedPixelCounts(vector<Mat> mats, vector<ROI> &rois) {
     for(int i = 0; i < mats.size(); i++) {
         Mat mat = mats[i];
         vector<Mat> rgbChannels;
@@ -67,7 +67,7 @@ void ROIUtils::setRedPixelCounts(vector<Mat> mats, vector<roi> &rois) {
     }
 }
 
-void ROIUtils::setWhitePixelCounts(vector<Mat> mats, vector<roi> &rois) {
+void ROIUtils::setWhitePixelCounts(vector<Mat> mats, vector<ROI> &rois) {
     for(int i = 0; i < mats.size(); i++) {
         Mat mat = mats[i];
         int whitePixels = cv::countNonZero(mat >= 255/2);
@@ -75,14 +75,14 @@ void ROIUtils::setWhitePixelCounts(vector<Mat> mats, vector<roi> &rois) {
     }
 }
 
-void ROIUtils::whitePixelOccupied(vector<roi> &rois) {
+void ROIUtils::whitePixelOccupied(vector<ROI> &rois) {
     for(int i = 0; i < rois.size(); i++) {
         int totalPixels = contourArea(rois[i].contour);
         double percentCoverageWhite = ((double)rois[i].whitePixelCount/(double)totalPixels);
         double percentCoverageRed = ((double)rois[i].redPixelCount/(double)totalPixels);
         
         if(percentCoverageRed <= RED_PIXEL_COVERAGE_THRESHOLD) {
-            rois[i].occupied = percentCoverageWhite <= rois[i].threshold ? false : true;
+            rois[i].setOccupied(percentCoverageWhite <= rois[i].threshold ? false : true);
         }
     }
 }
