@@ -20,17 +20,30 @@ void ROIUtils::drawROIsOnImage(vector<ROI> rois, Mat &image) {
             polylines(image, &pts, &npts, 1, true, Scalar(0,0,255), 1, CV_AA, 0);
         }
         
-        int totalPixels = contourArea(rois[i].contour);
-        double percentCoverage = ((double)rois[i].whitePixelCount/(double)totalPixels)*100.0;
-        
-        stringstream ss;
-        ss.precision(2);
-        ss << percentCoverage;
-        string percentageString = "ID:" + to_string(rois[i].id) + " " + ss.str() + "%";
-        
         //Display pixel count to the user.
-        putText(image, percentageString, rois[i].a, FONT_HERSHEY_PLAIN, 1.0, CV_RGB(255,255,255), 1.0);
+        ROIUtils::addLabel(image, rois[i]);
     }
+}
+
+void ROIUtils::addLabel(cv::Mat& image, const ROI &roi) {
+    //Get the label
+    int totalPixels = contourArea(roi.contour);
+    double percentCoverage = ((double)roi.whitePixelCount/(double)totalPixels)*100.0;
+    
+    stringstream ss;
+    ss.precision(2);
+    ss << percentCoverage;
+    string label = "ID:" + to_string(roi.id) + " " + ss.str() + "%";
+
+    //Get center point
+    double avgX = ( ( (roi.a.x + roi.b.x)/2 ) + ( (roi.c.x + roi.d.x)/2 ) ) / 2;
+    double avgY = ( ( (roi.a.y + roi.b.y)/2 ) + ( (roi.c.y + roi.d.y)/2 ) ) / 2;
+    Point point = Point(avgX,avgY);
+    int baseline = 0;
+    //Draw Everything
+    Size textSize = getTextSize(label, FONT_HERSHEY_PLAIN, 1.0, 1.0, &baseline);
+    rectangle(image, point + Point(-textSize.width/2, baseline), point + Point(textSize.width/2, -textSize.height), CV_RGB(255,255,255), CV_FILLED);
+    putText(image, label, point + Point(-textSize.width/2,3), FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0,0,0), 1.0);
 }
 
 vector<Mat> ROIUtils::getROIMats(vector<ROI> rois, Mat &image) {

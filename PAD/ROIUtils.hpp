@@ -84,4 +84,7 @@ public:
     static void whitePixelOccupied(vector<ROI> &rois);
     //Red pixels means motion is occuring within the given mat, we need to set this count for later determinination of whether or not there is moving obstruction.
     static void setRedPixelCounts(vector<Mat> mats, vector<ROI> &rois);
+private:
+    //Add a label to display the coverage percentage for a given ROI
+    static void addLabel(cv::Mat& image, const ROI &roi);
 };
