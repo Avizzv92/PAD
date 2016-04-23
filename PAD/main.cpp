@@ -20,6 +20,10 @@
 #include <thread>
 #include <regex>
 
+
+#define FRAME_DELAY 33
+#define LOG_TIME 1000*5//5 mins
+
 using namespace std;
 using namespace cv;
 
@@ -28,15 +32,11 @@ int CAMERA_ID = 1;
 int PARKING_LOT_ID = 1;
 string pKey = "570d34e1ab0109.67855404";
 
-//Const values hard coded.
-const int FRAME_DELAY = 33;
-const int LOG_TIME = 1000*5;//5 mins
-
 DBManager dbm;
 
 Mat videoFrame; //The current video frame being looked at
 Mat roisOverlay; //The overlap which draws the colored polygons for the rois
-vector<roi> rois; //Holds all of the user defined regions of interest
+vector<ROI> rois; //Holds all of the user defined regions of interest
 
 void handleLogging(Mat matToLog);
 void MouseCallBack(int event, int x, int y, int flags, void* userdata);
@@ -174,7 +174,7 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
         } else if(clicks == 4){//Create ROI
             four = Point(x,y);
             
-            roi insert;
+            ROI insert;
             insert.a = one;
             insert.b = two;
             insert.c = three;
@@ -200,7 +200,7 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
         int indexToDelete = -1;
         
         for(int i = 0; i < rois.size(); i++) {
-            roi curr = rois[i];
+            ROI curr = rois[i];
             
             if(pointPolygonTest(curr.contour, Point(x,y), true) >= 0) {
                 indexToDelete = i;
@@ -209,7 +209,7 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
         }
         
         if(indexToDelete != -1) {
-            roi roiToDelete = rois[indexToDelete];
+            ROI roiToDelete = rois[indexToDelete];
             dbm.deleteROI(roiToDelete.id);
             rois.erase(rois.begin() + indexToDelete);
         }
