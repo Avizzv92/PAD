@@ -49,7 +49,7 @@ vector<ROI> DBManager::getROIs() {
         newROI.d = Point(atoi(row[8]), atoi(row[9]));
         newROI.setOccupied(atoi(row[10]));
         newROI.description = row[11];
-        newROI.threshold = .07;//atof(row[12]);
+        newROI.threshold = atof(row[12]);
         
         vector<Point> contour;
         contour.push_back(newROI.a);
