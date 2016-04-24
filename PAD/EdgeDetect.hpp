@@ -11,12 +11,14 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 using namespace cv;
+using namespace std;
 
 class EdgeDetect {
 private:
     static int const scale;
     static int const delta;
     static int const ddepth;
+    static void equalizeHistogram(Mat &image);
     
 public:
     static void sobelEdgeDetect (Mat &image);

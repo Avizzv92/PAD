@@ -78,8 +78,8 @@ int main(int argc, const char * argv[]) {
     
     //Set up video capture
     VideoCapture cap;
-    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
-    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+    //cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+    //cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
     cap.open(0);
     
     //Create window with mouse callback

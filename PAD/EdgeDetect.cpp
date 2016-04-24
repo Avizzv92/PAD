@@ -40,7 +40,10 @@ void EdgeDetect::sobelEdgeDetect (Mat &image) {
 //Canny Edge Detection
 void EdgeDetect::cannyEdgeDetect (Mat &image) {
     Mat edge;
-
+    
+    //Equalize histogram, could be something else to test?
+    //equalizeHistogram(image);
+    
     //Keep/Remove (Needs Further Testing)
     //GaussianBlur( image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
 
@@ -53,4 +56,15 @@ void EdgeDetect::cannyEdgeDetect (Mat &image) {
     
     Canny( image, edge, thresholdLow, thresholdHigh); //Was 50, 150, 3);
     edge.convertTo(image, CV_8U);
+}
+
+void EdgeDetect::equalizeHistogram(Mat &image) {
+    cvtColor(image,image,CV_BGR2YCrCb);
+        
+    vector<Mat> channels;
+    split(image,channels);
+    equalizeHist(channels[0], channels[0]);
+    merge(channels,image);
+        
+    cvtColor(image,image,CV_YCrCb2BGR);
 }
