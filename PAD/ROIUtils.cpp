@@ -33,7 +33,7 @@ void ROIUtils::addLabel(cv::Mat& image, const ROI &roi) {
     stringstream ss;
     ss.precision(2);
     ss << percentCoverage;
-    string label = "ID:" + to_string(roi.id) + " " + ss.str() + "%";
+    string label = "Spt:" + roi.description + " " + ss.str() + "%";
 
     //Get center point
     double avgX = ( ( (roi.a.x + roi.b.x)/2 ) + ( (roi.c.x + roi.d.x)/2 ) ) / 2;
