@@ -41,8 +41,8 @@ void EdgeDetect::sobelEdgeDetect (Mat &image) {
 void EdgeDetect::cannyEdgeDetect (Mat &image) {
     Mat edge;
 
-    //Keep/Remove ? TEST!
-    GaussianBlur( image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
+    //Keep/Remove (Needs Further Testing)
+    //GaussianBlur( image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
 
     //Using OpenCV's threshold method with CV_THRESH_BINARY and CV_THRESH_OTSU parameters for determining automatically the betst thresholds for canny edge detection.
     Mat imageInGray, _garbageIMG;
