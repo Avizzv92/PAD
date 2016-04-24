@@ -121,8 +121,8 @@ int main(int argc, const char * argv[]) {
             
             //Convert video frame back to RGB to display the overlay indicators for ROIs which are colored
             cvtColor( videoFrame, videoFrame, CV_GRAY2RGB );
-            videoFrame += roisOverlay;//Add roi overlay mat
             videoFrame += motionMat;//Add motion detection mat
+            videoFrame += roisOverlay;//Add roi overlay mat
             
             handleLogging(originalFrame+roisOverlay);//Handle the logging aspect (We want to show the user the original colored image + the overlayed ROIs
             
