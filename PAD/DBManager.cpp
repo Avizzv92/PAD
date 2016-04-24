@@ -8,6 +8,8 @@
 
 #include "DBManager.hpp"
 
+u_int totalROIs = 0;
+
 DBManager::DBManager(void)
 {
     conn = mysql_init(NULL);
@@ -63,6 +65,8 @@ vector<ROI> DBManager::getROIs() {
     
     mysql_free_result(results);
     
+    totalROIs = (u_int)rois.size();
+    
     return rois;
 }
 
@@ -70,15 +74,14 @@ void DBManager::logOccupancy(int cameraID, vector<ROI> rois) {
     
     for(int i = 0; i < rois.size(); i++) {
         ROI curr = rois[i];
-        string insert = "INSERT INTO OCCUPANCY_LOG (camera_id, parking_spot_id, isOccupied, parking_lot_id) VALUES (" + to_string(cameraID) + " , " + to_string(curr.id) + "," + to_string(curr.getOccupied() == true ? 1 : 0) + "," + to_string(curr.parking_lot_id) + ") ;";
-    
+        string insert = "INSERT INTO OCCUPANCY_LOG (camera_id, parking_spot_id, isOccupied, parking_lot_id, parking_spot_desc) VALUES (" + to_string(cameraID) + " , " + to_string(curr.id) + "," + to_string(curr.getOccupied() == true ? 1 : 0) + "," + to_string(curr.parking_lot_id) + ",'" + curr.description + "') ;";
         MYSQL_RES *results = performQuery(conn, (char *)insert.c_str());
         mysql_free_result(results);
     }
 }
 
 void DBManager::insertROI(ROI &newROI) {
-    string description = newROI.description.length() == 0 ? "''" : newROI.description;
+    string description = to_string(totalROIs+1);
     string insert = "INSERT INTO PARKING_SPOT (parking_lot_id, pointA, pointB, pointC, pointD, isOccupied, description, threshold) VALUES ( " + to_string(newROI.parking_lot_id) + ", PointFromText('POINT("+to_string(newROI.a.x)+" "+to_string(newROI.a.y)+")'), PointFromText('POINT("+to_string(newROI.b.x)+" "+to_string(newROI.b.y)+")'), PointFromText('POINT("+to_string(newROI.c.x)+" "+to_string(newROI.c.y)+")'), PointFromText('POINT("+to_string(newROI.d.x)+" "+to_string(newROI.d.y)+")'), "+to_string(0)+", "+ description +", " + to_string(newROI.threshold) + " );";
 
     MYSQL_RES *results = performQuery(conn, (char *)insert.c_str());
@@ -87,7 +90,9 @@ void DBManager::insertROI(ROI &newROI) {
     MYSQL_RES *results2 = performQuery(conn, (char *)"SELECT LAST_INSERT_ID();");
     MYSQL_ROW row = mysql_fetch_row(results2);
     newROI.id = atoi(row[0]);
+    newROI.description = description;
     mysql_free_result(results2);
+    totalROIs++;
 }
 
 void DBManager::deleteROI(int id) {
@@ -98,6 +103,7 @@ void DBManager::deleteROI(int id) {
     string deleteQuery2 = "DELETE FROM OCCUPANCY_LOG WHERE parking_spot_id = " + to_string(id);
     MYSQL_RES *results2 = performQuery(conn, (char *)deleteQuery2.c_str());
     mysql_free_result(results2);
+    totalROIs--;
 }
 
 bool DBManager::isValid(string pKey, int parking_lot_id) {
