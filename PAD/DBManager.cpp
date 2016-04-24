@@ -81,18 +81,22 @@ void DBManager::logOccupancy(int cameraID, vector<ROI> rois) {
 }
 
 void DBManager::insertROI(ROI &newROI) {
-    string description = to_string(totalROIs+1);
-    string insert = "INSERT INTO PARKING_SPOT (parking_lot_id, pointA, pointB, pointC, pointD, isOccupied, description, threshold) VALUES ( " + to_string(newROI.parking_lot_id) + ", PointFromText('POINT("+to_string(newROI.a.x)+" "+to_string(newROI.a.y)+")'), PointFromText('POINT("+to_string(newROI.b.x)+" "+to_string(newROI.b.y)+")'), PointFromText('POINT("+to_string(newROI.c.x)+" "+to_string(newROI.c.y)+")'), PointFromText('POINT("+to_string(newROI.d.x)+" "+to_string(newROI.d.y)+")'), "+to_string(0)+", "+ description +", " + to_string(newROI.threshold) + " );";
+    if(totalROIs < 999 ) {
+        string description = to_string(totalROIs+1);
+        string insert = "INSERT INTO PARKING_SPOT (parking_lot_id, pointA, pointB, pointC, pointD, isOccupied, description, threshold) VALUES ( " + to_string(newROI.parking_lot_id) + ", PointFromText('POINT("+to_string(newROI.a.x)+" "+to_string(newROI.a.y)+")'), PointFromText('POINT("+to_string(newROI.b.x)+" "+to_string(newROI.b.y)+")'), PointFromText('POINT("+to_string(newROI.c.x)+" "+to_string(newROI.c.y)+")'), PointFromText('POINT("+to_string(newROI.d.x)+" "+to_string(newROI.d.y)+")'), "+to_string(0)+", "+ description +", " + to_string(newROI.threshold) + " );";
 
-    MYSQL_RES *results = performQuery(conn, (char *)insert.c_str());
-    mysql_free_result(results);
+        MYSQL_RES *results = performQuery(conn, (char *)insert.c_str());
+        mysql_free_result(results);
     
-    MYSQL_RES *results2 = performQuery(conn, (char *)"SELECT LAST_INSERT_ID();");
-    MYSQL_ROW row = mysql_fetch_row(results2);
-    newROI.id = atoi(row[0]);
-    newROI.description = description;
-    mysql_free_result(results2);
-    totalROIs++;
+        MYSQL_RES *results2 = performQuery(conn, (char *)"SELECT LAST_INSERT_ID();");
+        MYSQL_ROW row = mysql_fetch_row(results2);
+        newROI.id = atoi(row[0]);
+        newROI.description = description;
+        mysql_free_result(results2);
+        totalROIs++;
+    } else {
+        printf("You can't have more than 999 spots");
+    }
 }
 
 void DBManager::deleteROI(int id) {
