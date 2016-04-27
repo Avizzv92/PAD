@@ -51,7 +51,7 @@ public:
    /*
         Delete a ROI by its id, from the DB
     */
-    void deleteROI(int id);
+    void deleteROI(int id, int parkingLotID);
     
     /*
      For logging, we need to make sure the supplied pKey is correct

@@ -99,8 +99,8 @@ void DBManager::insertROI(ROI &newROI) {
     }
 }
 
-void DBManager::deleteROI(int id) {
-    string deleteQuery = "DELETE FROM PARKING_SPOT WHERE id = " + to_string(id);
+void DBManager::deleteROI(int id, int parkingLotID) {
+    string deleteQuery = "DELETE FROM PARKING_SPOT WHERE id = " + to_string(id) + " AND parking_lot_id = " + to_string(parkingLotID);
     MYSQL_RES *results = performQuery(conn, (char *)deleteQuery.c_str());
     mysql_free_result(results);
     //Remove this ROI's logs too.
