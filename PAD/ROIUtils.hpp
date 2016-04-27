@@ -30,10 +30,10 @@ class ROI {
     public:
         int id;
         int parking_lot_id;
-        String description; //descriptive id - currently unused?
+        String description;
         Point a, b, c, d; //the four points that form this roi
         int whitePixelCount = 0; //number of white pixels in this roi
-        int redPixelCount = 0;
+        int redPixelCount = 0; //number of red pixels in this roi
         double threshold = WHITE_PIXEL_DEFAULT_THRESHOLD;
         vector<Point> contour;
     

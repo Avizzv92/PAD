@@ -42,8 +42,8 @@ void ROIUtils::addLabel(cv::Mat& image, const ROI &roi) {
     int baseline = 0;
     //Draw Everything
     Size textSize = getTextSize(label, FONT_HERSHEY_PLAIN, 1.0, 1.0, &baseline);
-    rectangle(image, point + Point(-textSize.width/2, baseline), point + Point(textSize.width/2, -textSize.height), CV_RGB(255,255,255), CV_FILLED);
-    putText(image, label, point + Point(-textSize.width/2,3), FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0,0,0), 1.0);
+    rectangle(image, point + Point(-textSize.width/2, baseline), point + Point(textSize.width/2, -textSize.height), CV_RGB(50,50,50), CV_FILLED);
+    putText(image, label, point + Point(-textSize.width/2,3), FONT_HERSHEY_PLAIN, 1.0, CV_RGB(255,255,255), 1.0);
 }
 
 vector<Mat> ROIUtils::getROIMats(vector<ROI> rois, Mat &image) {

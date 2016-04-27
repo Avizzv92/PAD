@@ -22,7 +22,7 @@
 
 
 #define FRAME_DELAY 33
-#define LOG_TIME 1000*5//5 mins
+#define LOG_TIME 1000*5
 
 using namespace std;
 using namespace cv;
@@ -61,7 +61,7 @@ void handleArgs(int argc, const char * argv[]) {
             printf("PARKING LOT ID: %i \n", PARKING_LOT_ID);
             printf("PRIVATE KEY: %s \n", pKey.c_str());
         } else {
-            printf("Enter in order the camera id (From Website), parking lot id (From Website), and the private key (From Website).\n");
+            printf("Enter in order the camera id (User Given), parking lot id (From Website), and the private key (From Website).\n");
         }
     }
 }
@@ -210,7 +210,7 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
         
         if(indexToDelete != -1) {
             ROI roiToDelete = rois[indexToDelete];
-            dbm.deleteROI(roiToDelete.id);
+            dbm.deleteROI(roiToDelete.id, PARKING_LOT_ID);
             rois.erase(rois.begin() + indexToDelete);
         }
     }
