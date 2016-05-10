@@ -2,7 +2,7 @@
 //  DBManager.hpp
 //  PAD
 //
-//  Created by Aaron Vizzini & Wu Weibo on 23/03/2016.
+//  Created by Aaron Vizzini & Wu Weibo on 25/03/2016.
 //  Copyright © 2016 ESIGELEC-IS. All rights reserved.
 //
 
@@ -26,6 +26,7 @@ private:
     MYSQL_RES* performQuery(MYSQL *connection, char *sql_query);
     
 public:
+    
     /*
         Constructor and deconstructor
      */

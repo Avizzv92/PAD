@@ -2,13 +2,13 @@
 //  DBManager.cpp
 //  PAD
 //
-//  Created by Aaron Vizzini & Wu Weibo on 23/03/2016.
+//  Created by Aaron Vizzini & Wu Weibo on 25/03/2016.
 //  Copyright © 2016 ESIGELEC-IS. All rights reserved.
 //
 
 #include "DBManager.hpp"
 
-u_int totalROIs = 0;
+static u_int totalROIs = 0;
 
 DBManager::DBManager(void)
 {

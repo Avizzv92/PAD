@@ -11,7 +11,7 @@ int const EdgeDetect::scale = 1;
 int const EdgeDetect::delta = 0;
 int const EdgeDetect::ddepth = CV_16S;
 
-//Sobel Edge Detection
+//Sobel Edge Detection (unused)
 void EdgeDetect::sobelEdgeDetect (Mat &image) {
     Mat src_gray;
         
@@ -42,19 +42,21 @@ void EdgeDetect::cannyEdgeDetect (Mat &image) {
     Mat edge;
     
     //Equalize histogram, could be something else to test?
-    //equalizeHistogram(image);
+    equalizeHistogram(image);
     
     //Keep/Remove (Needs Further Testing)
     GaussianBlur( image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
 
-    //Using OpenCV's threshold method with CV_THRESH_BINARY and CV_THRESH_OTSU parameters for determining automatically the betst thresholds for canny edge detection.
+    //Using OpenCV's threshold method with CV_THRESH_BINARY
+    //and CV_THRESH_OTSU parameters for determining automatically the
+    //best thresholds for canny edge detection.
     Mat imageInGray, _garbageIMG;
     cvtColor( image, imageInGray, CV_BGR2GRAY );
     double otsuThreshold = threshold(imageInGray, _garbageIMG, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
     double thresholdHigh = otsuThreshold;
     double thresholdLow = otsuThreshold * 0.5;
     
-    Canny( image, edge, thresholdLow, thresholdHigh); //Was 50, 150, 3);
+    Canny( image, edge, thresholdLow, thresholdHigh);
     edge.convertTo(image, CV_8U);
 }
 

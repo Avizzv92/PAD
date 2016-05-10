@@ -23,6 +23,7 @@
 
 #define FRAME_DELAY 33
 #define LOG_TIME 1000*5
+#define IMAGE_UPLOAD_URL "http://localhost:8888/uploadImage.php"
 
 using namespace std;
 using namespace cv;
@@ -152,7 +153,8 @@ Mat detectMotion(Mat originalFrame) {
     //Get individual mats within a frame from user defined ROIs (for motion)
     vector<Mat> mats_motion = ROIUtils::getROIMats(rois, fgMaskMOG2_red);
     
-    ROIUtils::setRedPixelCounts(mats_motion, rois); //Set the red pixel counts for each roi to determine if motion is occuring within it. 
+    //Set the red pixel counts for each roi to determine if motion is occuring within it. 
+    ROIUtils::setRedPixelCounts(mats_motion, rois);
     
     return fgMaskMOG2;
 }
@@ -246,7 +248,7 @@ void sendImageToServer(string fileName, string fileNameWExt) {
         curl_formadd(&post, &last, CURLFORM_COPYNAME, "file", CURLFORM_FILE, (const char *)fileNameWExt.c_str(), CURLFORM_END);
         curl_formadd(&post, &last, CURLFORM_COPYNAME, "name", CURLFORM_COPYCONTENTS, (const char *)fileName.c_str(), CURLFORM_END);
         
-        curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8888/uploadImage.php");
+        curl_easy_setopt(curl, CURLOPT_URL, IMAGE_UPLOAD_URL);
         curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
         
         res = curl_easy_perform(curl);
