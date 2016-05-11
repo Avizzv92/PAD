@@ -75,7 +75,7 @@ int main(int argc, const char * argv[]) {
     if(dbm.isValid(pKey, PARKING_LOT_ID) != true){cout<<"Invalid IDs or Private Key"<<endl; return 1;}
     
     //Get ROIs from the DB.
-    rois = dbm.getROIs();
+    rois = dbm.getROIs(PARKING_LOT_ID);
     
     //Set up video capture
     VideoCapture cap;

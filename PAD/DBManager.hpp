@@ -36,7 +36,7 @@ public:
     /*
         Returns a vector of ROIs from the DB
      */
-    vector<ROI> getROIs();
+    vector<ROI> getROIs(int parkingLotID);
     
     /*
         For a given camera ID, log all of the ROIs' information into the log table

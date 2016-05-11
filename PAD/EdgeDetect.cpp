@@ -45,7 +45,7 @@ void EdgeDetect::cannyEdgeDetect (Mat &image) {
     equalizeHistogram(image);
     
     //Keep/Remove (Needs Further Testing)
-    GaussianBlur( image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
+    //GaussianBlur( image, image, Size(3,3), 0, 0, BORDER_DEFAULT );
 
     //Using OpenCV's threshold method with CV_THRESH_BINARY
     //and CV_THRESH_OTSU parameters for determining automatically the

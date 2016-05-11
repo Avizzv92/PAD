@@ -33,13 +33,13 @@ MYSQL_RES* DBManager::performQuery(MYSQL *connection, char *sql_query)
     return mysql_use_result(connection);
 }
 
-vector<ROI> DBManager::getROIs() {
+vector<ROI> DBManager::getROIs(int parkingLotID) {
     vector<ROI> rois;
     
     MYSQL_RES *results;
     MYSQL_ROW row;
-    
-    results = performQuery(conn, (char *)"SELECT id, parking_lot_id, X(pointA), Y(pointA), X(pointB), Y(pointB), X(pointC), Y(pointC), X(pointD), Y(pointD), isOccupied, description, threshold FROM PARKING_SPOT;");
+    string queryString = "SELECT id, parking_lot_id, X(pointA), Y(pointA), X(pointB), Y(pointB), X(pointC), Y(pointC), X(pointD), Y(pointD), isOccupied, description, threshold FROM PARKING_SPOT WHERE parking_lot_id = " + to_string(parkingLotID) + ";";
+    results = performQuery(conn, (char *) queryString.c_str());
     
     while ((row = mysql_fetch_row(results)) != NULL) {
         ROI newROI;
