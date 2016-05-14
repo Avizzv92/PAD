@@ -68,6 +68,8 @@ int main(int argc, const char * argv[]) {
     //Give this Mat an intial size equal to that of the video frame.
     roisOverlay = Mat::zeros( videoFrame.size(), CV_8UC3 );
     
+    int frameDelay = PADSettings::instance().getFrameDelay();
+    
     //Capturing a frame every X seconds infinetly.
     while(1) {
         try {
@@ -110,7 +112,7 @@ int main(int argc, const char * argv[]) {
             std::cout << "Exception caught : imshow:\n" << err_msg << std::endl;
         }
         
-        waitKey(PADSettings::instance().getFrameDelay());
+        waitKey(frameDelay);
     }
     
     return 0;
