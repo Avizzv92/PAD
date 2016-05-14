@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- PAD, User Modifiable Settings File -->
+<!-- PAD, User Modifiable Settings File - RESTART ANALYSIS SOFTWARE AFTER CHANGES -->
+
 <settings>
     <!-- User defined camera id -->
     <camera_id>14</camera_id>
