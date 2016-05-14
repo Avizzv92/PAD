@@ -19,10 +19,10 @@
 #include <stdio.h>
 #include <thread>
 #include <regex>
-
+#include <ctime>
 
 #define FRAME_DELAY 33
-#define LOG_TIME 1000*5
+#define LOG_TIME 30
 #define IMAGE_UPLOAD_URL "http://localhost:8888/uploadImage.php"
 
 using namespace std;
@@ -219,14 +219,15 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
 }
 
 //Handles logging actions
-int timeSinceLastLog = 0;
+time_t lastLongTime = time(0);
 
 void handleLogging(Mat matToLog) {
-    //Log occupancy information into the DB every 10 mins? Rarely would someone be in a parking spot for < 10 mins?
-    timeSinceLastLog += FRAME_DELAY;
     
-    if(timeSinceLastLog >= LOG_TIME) {
-        timeSinceLastLog = 0;
+    time_t now = time(0);
+
+    if((now - lastLongTime) >= LOG_TIME) {
+        lastLongTime = now;
+        
         dbm.logOccupancy(CAMERA_ID, rois);
         
         string fileName = "logImg_"+to_string(PARKING_LOT_ID);
