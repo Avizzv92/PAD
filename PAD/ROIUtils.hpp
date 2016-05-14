@@ -11,6 +11,7 @@
 #include <opencv/highgui.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "PADSettings.hpp"
 
 using namespace cv;
 using namespace std;
@@ -18,9 +19,6 @@ using namespace std;
 #define FRAMES_TO_AVG 5
 #define EMPTY -1
 #define OCCUPIED 1
-
-#define RED_PIXEL_COVERAGE_THRESHOLD 0.05
-#define WHITE_PIXEL_DEFAULT_THRESHOLD 0.055
 
 class ROI {
     private:
@@ -34,7 +32,7 @@ class ROI {
         Point a, b, c, d; //the four points that form this roi
         int whitePixelCount = 0; //number of white pixels in this roi
         int redPixelCount = 0; //number of red pixels in this roi
-        double threshold = WHITE_PIXEL_DEFAULT_THRESHOLD;
+        double threshold = PADSettings::instance().getWhitePixelThreshold();
         vector<Point> contour;
     
     /*

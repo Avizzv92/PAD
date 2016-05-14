@@ -21,17 +21,15 @@
 #include <regex>
 #include <ctime>
 
-#define FRAME_DELAY 33
-#define LOG_TIME 30
-#define IMAGE_UPLOAD_URL "http://localhost:8888/uploadImage.php"
+#include "PADSettings.hpp"
 
 using namespace std;
 using namespace cv;
 
 //User Supplied Values (Test Values Below)
-int CAMERA_ID = 1;
-int PARKING_LOT_ID = 1;
-string pKey = "570d34e1ab0109.67855404";
+int CAMERA_ID;
+int PARKING_LOT_ID;
+string pKey;
 
 DBManager dbm;
 
@@ -44,32 +42,10 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata);
 Mat detectMotion(Mat originalFrame);
 void sendImageToServer(string fileName, string fileNameWExt);
 
-void handleArgs(int argc, const char * argv[]) {
-    if(argc > 0) {
-        if(argc == 4) {
-            CAMERA_ID = atoi(argv[1]);
-            PARKING_LOT_ID = atoi(argv[2]);
-            pKey = argv[3];
-            
-            //Make sure the key is formatted as we expect.
-            regex keyREGEX("^[a-zA-Z0-9.]*$");
-            if(regex_match(pKey,keyREGEX) == false || pKey.size() > 23) {
-                printf("Bad Private Key.\n");
-                exit(1);
-            }
-            
-            printf("CAMERA ID: %i \n", CAMERA_ID);
-            printf("PARKING LOT ID: %i \n", PARKING_LOT_ID);
-            printf("PRIVATE KEY: %s \n", pKey.c_str());
-        } else {
-            printf("Enter in order the camera id (User Given), parking lot id (From Website), and the private key (From Website).\n");
-        }
-    }
-}
-
 int main(int argc, const char * argv[]) {
-    
-    handleArgs(argc, argv);
+    CAMERA_ID = PADSettings::instance().getCameraId();
+    PARKING_LOT_ID = PADSettings::instance().getParkingLotId();
+    pKey = PADSettings::instance().getPrivateKey();
     
     //Attempt to validate with the server using IDs and the pKey
     if(dbm.isValid(pKey, PARKING_LOT_ID) != true){cout<<"Invalid IDs or Private Key"<<endl; return 1;}
@@ -81,7 +57,7 @@ int main(int argc, const char * argv[]) {
     VideoCapture cap;
     //cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
     //cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-    cap.open(0);
+    cap.open(PADSettings::instance().getVideoCaptureSource());
     
     //Create window with mouse callback
     namedWindow("window",1);
@@ -134,7 +110,7 @@ int main(int argc, const char * argv[]) {
             std::cout << "Exception caught : imshow:\n" << err_msg << std::endl;
         }
         
-        waitKey(FRAME_DELAY);
+        waitKey(PADSettings::instance().getFrameDelay());
     }
     
     return 0;
@@ -225,14 +201,21 @@ void handleLogging(Mat matToLog) {
     
     time_t now = time(0);
 
-    if((now - lastLongTime) >= LOG_TIME) {
+    if((now - lastLongTime) >= PADSettings::instance().getLogTime()) {
         lastLongTime = now;
         
         dbm.logOccupancy(CAMERA_ID, rois);
         
         string fileName = "logImg_"+to_string(PARKING_LOT_ID);
         string fileNameWExt = "logImg_"+to_string(PARKING_LOT_ID)+".png";
+        
         imwrite(fileNameWExt, matToLog);
+        
+        if(PADSettings::instance().getIsTesting()) {
+            string sampleFileNameWExt = "/Volumes/PADSamples/sampleImg_"+to_string(now)+".png";
+            imwrite(sampleFileNameWExt, matToLog);
+        }
+        
         thread uploadThread(sendImageToServer, fileName, fileNameWExt);
         uploadThread.join();
     }
@@ -249,7 +232,7 @@ void sendImageToServer(string fileName, string fileNameWExt) {
         curl_formadd(&post, &last, CURLFORM_COPYNAME, "file", CURLFORM_FILE, (const char *)fileNameWExt.c_str(), CURLFORM_END);
         curl_formadd(&post, &last, CURLFORM_COPYNAME, "name", CURLFORM_COPYCONTENTS, (const char *)fileName.c_str(), CURLFORM_END);
         
-        curl_easy_setopt(curl, CURLOPT_URL, IMAGE_UPLOAD_URL);
+        curl_easy_setopt(curl, CURLOPT_URL, PADSettings::instance().getImageUploadURL().c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
         
         res = curl_easy_perform(curl);

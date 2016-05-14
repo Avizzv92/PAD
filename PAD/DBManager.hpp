@@ -12,12 +12,6 @@
 #include <iostream>
 #include "ROIUtils.hpp"
 
-#define SERVER "localhost"
-#define USERNAME "root"
-#define PASSWORD "root"
-#define DB "pad"
-#define PORT 8889
-
 using namespace std;
 
 class DBManager {

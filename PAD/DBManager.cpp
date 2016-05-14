@@ -7,6 +7,7 @@
 //
 
 #include "DBManager.hpp"
+#import "PADSettings.hpp"
 
 static u_int totalROIs = 0;
 
@@ -15,7 +16,7 @@ DBManager::DBManager(void)
     conn = mysql_init(NULL);
     mysql_autocommit(conn, true);
 
-    if (!mysql_real_connect(conn, SERVER, USERNAME, PASSWORD, DB, PORT, NULL, 0)) {
+    if (!mysql_real_connect(conn, PADSettings::instance().getServer().c_str(), PADSettings::instance().getUsername().c_str(), PADSettings::instance().getPassword().c_str(), PADSettings::instance().getDB().c_str(), PADSettings::instance().getPort(), NULL, 0)) {
             printf("Conection error : %s\n", mysql_error(conn));
             printf("Verify connection settings and internet/server access, then restart the program.\n");
             exit(1);

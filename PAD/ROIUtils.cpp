@@ -94,7 +94,7 @@ void ROIUtils::whitePixelOccupied(vector<ROI> &rois) {
         double percentCoverageWhite = ((double)rois[i].whitePixelCount/(double)totalPixels);
         double percentCoverageRed = ((double)rois[i].redPixelCount/(double)totalPixels);
         
-        if(percentCoverageRed <= RED_PIXEL_COVERAGE_THRESHOLD) {
+        if(percentCoverageRed <= PADSettings::instance().getRedPixelThreshold()) {
             rois[i].setOccupied(percentCoverageWhite <= rois[i].threshold ? false : true);
         }
     }

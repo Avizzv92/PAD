@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- PAD, User Modifiable Settings File -->
+<settings>
+    <!-- User defined camera id -->
+    <camera_id>14</camera_id>
+    <!-- Parking lot id obtained from website admin page -->
+    <parking_lot_id>14</parking_lot_id>
+    <!-- Private key obtained from website admin page -->
+    <private_key>5730ab0b4e8e70.76731272</private_key>
+        
+    <!-- Decimal percentage of red pixels a ROI should be covered in to be considered as obstructed by motion, default .05 -->
+    <red_pixel_threshold>.05</red_pixel_threshold>
+    <!-- Decimal percentage of white pixels a ROI should be covered in to be considered occupied -->
+    <white_pixel_threshold>.055</white_pixel_threshold>
+    
+    <!-- DB Connection Details -->
+    <server>localhost</server>
+    <username>root</username>
+    <password>root</password>
+    <db>pad</db>
+    <port>8889</port>
+    
+    <!-- if 1 (true) then we are saving images locally for later analysis, else it is 0 (false) -->
+    <is_testing>1</is_testing>
+    
+    <!-- OpenCV frame delay, default 33 -->
+    <frame_delay>33</frame_delay>
+    
+    <!-- Number of seconds between each log capture, default 30 -->
+    <log_time>30</log_time>
+    
+    <!-- URL where logged images will be sent to -->
+    <image_upload_url>http://localhost:8888/uploadImage.php</image_upload_url>
+    
+    <!-- Int value between 0..X indicating the video source for OpenCV -->
+    <video_capture_source>0</video_capture_source>
+</settings>
