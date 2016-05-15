@@ -18,7 +18,6 @@ PADSettings& PADSettings::instance()
     return instance;
 }
 
-
 int PADSettings::getCameraId() {
     return stoi(doc.FirstChildElement( "settings" )->FirstChildElement( "camera_id" )->GetText());
 }
@@ -77,4 +76,8 @@ string PADSettings::getImageUploadURL() {
 
 int PADSettings::getVideoCaptureSource() {
     return stoi(doc.FirstChildElement( "settings" )->FirstChildElement( "video_capture_source" )->GetText());
+}
+
+string PADSettings::getLoggingImgDir() {
+    return doc.FirstChildElement( "settings" )->FirstChildElement( "logging_img_dir" )->GetText();
 }

@@ -49,7 +49,9 @@ public:
     
     string getImageUploadURL();
     
-    int getVideoCaptureSource();    
+    int getVideoCaptureSource();
+    
+    string getLoggingImgDir();
 };
 
 #endif

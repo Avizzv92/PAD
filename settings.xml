@@ -24,6 +24,7 @@
     
     <!-- if 1 (true) then we are saving images locally for later analysis, else it is 0 (false) -->
     <is_testing>1</is_testing>
+    <logging_img_dir>/Volumes/PADSamples/</logging_img_dir>
     
     <!-- OpenCV frame delay, default 33 -->
     <frame_delay>33</frame_delay>
@@ -36,4 +37,5 @@
     
     <!-- Int value between 0..X indicating the video source for OpenCV -->
     <video_capture_source>0</video_capture_source>
+    
 </settings>

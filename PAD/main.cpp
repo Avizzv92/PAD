@@ -214,7 +214,7 @@ void handleLogging(Mat matToLog) {
         imwrite(fileNameWExt, matToLog);
         
         if(PADSettings::instance().getIsTesting()) {
-            string sampleFileNameWExt = "/Volumes/PADSamples/sampleImg_"+to_string(now)+".png";
+            string sampleFileNameWExt = PADSettings::instance().getLoggingImgDir()+"sampleImg_"+to_string(now)+".png";
             imwrite(sampleFileNameWExt, matToLog);
         }
         
