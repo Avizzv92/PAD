@@ -42,7 +42,7 @@ void EdgeDetect::sobelEdgeDetect (Mat &image) {
 void EdgeDetect::cannyEdgeDetect (Mat &image) {
     Mat edge;
     
-    //Equalize histogram, could be something else to test?
+    //Equalize histogram
     equalizeHistogram(image);
     
     //Keep/Remove (Needs Further Testing)

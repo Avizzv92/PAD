@@ -21,7 +21,7 @@ private:
     PADSettings();
     
 public:
-    static PADSettings& instance();
+    static PADSettings &instance();
     
     XMLDocument doc;
 

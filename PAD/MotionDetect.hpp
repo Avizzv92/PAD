@@ -17,6 +17,7 @@ using namespace cv;
 
 class MotionDetect {
 public:
+    //Detect motion within a frame and draw it as red pixels, then set the red pixel count of the ROIs.
     static Mat detectMotion(Mat originalFrame, vector<ROI> &rois);
 };
 #endif /* MotionDetect_hpp */

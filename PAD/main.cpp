@@ -31,10 +31,8 @@ Mat videoFrame; //The current video frame being looked at
 Mat roisOverlay; //The overlap which draws the colored polygons for the rois
 vector<ROI> rois; //Holds all of the user defined regions of interest
 
-void handleLogging(Mat matToLog);
 void MouseCallBack(int event, int x, int y, int flags, void* userdata);
 Mat detectMotion(Mat originalFrame);
-void sendImageToServer(string fileName, string fileNameWExt);
 
 int main(int argc, const char * argv[]) {
     CAMERA_ID = PADSettings::instance().getCameraId();
