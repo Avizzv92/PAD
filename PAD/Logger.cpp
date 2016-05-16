@@ -2,7 +2,7 @@
 //  Logger.cpp
 //  PAD
 //
-//  Created by Aaron Vizzini on 16/05/2016.
+//  Created by Aaron Vizzini & Wu Weibo on 16/05/2016.
 //  Copyright © 2016 ESIGELEC-IS. All rights reserved.
 //
 
@@ -15,7 +15,7 @@
 
 time_t lastLongTime = time(0);
 
-void Logger::handleLogging(DBManager &dbm, Mat matToLog, int CAMERA_ID, int PARKING_LOT_ID, vector<ROI> rois) {
+void Logger::handleLogging(DBManager &dbm, Mat matToLog, int CAMERA_ID, int PARKING_LOT_ID, vector<ROI> &rois) {
     
     time_t now = time(0);
     

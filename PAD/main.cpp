@@ -15,6 +15,7 @@
 #include "DBManager.hpp"
 #include "Logger.hpp"
 #include "PADSettings.hpp"
+#include "MotionDetect.hpp"
 
 using namespace std;
 using namespace cv;
@@ -77,7 +78,7 @@ int main(int argc, const char * argv[]) {
             EdgeDetect::cannyEdgeDetect(videoFrame);
             
             //Detect motion and get the generated mat to display later
-            Mat motionMat = detectMotion(originalFrame);
+            Mat motionMat = MotionDetect::detectMotion(originalFrame, rois);
             
             //Get individual mats within a frame from user defined ROIs
             vector<Mat> mats_edged = ROIUtils::getROIMats(rois, videoFrame);
@@ -109,25 +110,6 @@ int main(int argc, const char * argv[]) {
     }
     
     return 0;
-}
-
-Ptr<BackgroundSubtractor> pMOG2 = createBackgroundSubtractorMOG2(100, 16, false);
-
-Mat detectMotion(Mat originalFrame) {
-    //If motion is detected it is drawn in red pixels
-    Mat fgMaskMOG2;
-    pMOG2->apply(originalFrame, fgMaskMOG2);
-    cvtColor(fgMaskMOG2, fgMaskMOG2, CV_GRAY2RGB);
-    Mat fgMaskMOG2_red;
-    inRange(fgMaskMOG2,Scalar(255,255,255),Scalar(255,255,255),fgMaskMOG2_red);
-    fgMaskMOG2.setTo(Scalar(0,0,255),fgMaskMOG2_red);
-    //Get individual mats within a frame from user defined ROIs (for motion)
-    vector<Mat> mats_motion = ROIUtils::getROIMats(rois, fgMaskMOG2_red);
-    
-    //Set the red pixel counts for each roi to determine if motion is occuring within it. 
-    ROIUtils::setRedPixelCounts(mats_motion, rois);
-    
-    return fgMaskMOG2;
 }
 
 int clicks = 0; //Keeps track of mouse clicks to know what point is being assigned.
