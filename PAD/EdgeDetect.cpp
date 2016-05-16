@@ -6,6 +6,7 @@
 //
 
 #include "EdgeDetect.hpp"
+#include <opencv2/imgproc/imgproc.hpp>
 
 int const EdgeDetect::scale = 1;
 int const EdgeDetect::delta = 0;

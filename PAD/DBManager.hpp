@@ -6,10 +6,10 @@
 //  Copyright © 2016 ESIGELEC-IS. All rights reserved.
 //
 
+#ifndef DBMANAGER_hpp
+#define DBMANAGER_hpp
+
 #include <mysql.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
 #include "ROIUtils.hpp"
 
 using namespace std;
@@ -53,3 +53,4 @@ public:
      */
     bool isValid(string pKey, int parking_lot_id);
 };
+#endif

@@ -6,21 +6,14 @@
 //  Copyright © 2016 ESIGELEC-IS. All rights reserved.
 //
 
-#include <iostream>
 #include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include <opencv2/video.hpp>
+#include <regex>
 #include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+
 #include "EdgeDetect.hpp"
 #include "DBManager.hpp"
-#include "opencv2/videoio.hpp"
-#include <opencv2/video.hpp>
-#include <curl/curl.h>
-#include <stdio.h>
-#include <thread>
-#include <regex>
-#include <ctime>
-
+#include "Logger.hpp"
 #include "PADSettings.hpp"
 
 using namespace std;
@@ -103,7 +96,7 @@ int main(int argc, const char * argv[]) {
             videoFrame += motionMat;//Add motion detection mat
             videoFrame += roisOverlay;//Add roi overlay mat
             
-            handleLogging(originalFrame+roisOverlay);//Handle the logging aspect (We want to show the user the original colored image + the overlayed ROIs
+            Logger::handleLogging(dbm, originalFrame+roisOverlay, CAMERA_ID, PARKING_LOT_ID, rois);//Handle the logging aspect (We want to show the user the original colored image + the overlayed ROIs
             
             imshow("window", videoFrame);
             
@@ -194,52 +187,4 @@ void MouseCallBack(int event, int x, int y, int flags, void* userdata) {
             rois.erase(rois.begin() + indexToDelete);
         }
     }
-}
-
-//Handles logging actions
-time_t lastLongTime = time(0);
-
-void handleLogging(Mat matToLog) {
-    
-    time_t now = time(0);
-
-    if((now - lastLongTime) >= PADSettings::instance().getLogTime()) {
-        lastLongTime = now;
-        
-        dbm.logOccupancy(CAMERA_ID, rois);
-        
-        string fileName = "logImg_"+to_string(PARKING_LOT_ID);
-        string fileNameWExt = "logImg_"+to_string(PARKING_LOT_ID)+".png";
-        
-        imwrite(fileNameWExt, matToLog);
-        
-        if(PADSettings::instance().getIsTesting()) {
-            string sampleFileNameWExt = PADSettings::instance().getLoggingImgDir()+"sampleImg_"+to_string(now)+".png";
-            imwrite(sampleFileNameWExt, matToLog);
-        }
-        
-        thread uploadThread(sendImageToServer, fileName, fileNameWExt);
-        uploadThread.join();
-    }
-}
-
-//Send a single frame to the server for logging purposes (only one ever exists at a single time for a single parking lot)
-void sendImageToServer(string fileName, string fileNameWExt) {
-    CURL *curl = curl_easy_init();
-    CURLcode res;
-    struct curl_httppost *post= NULL;
-    struct curl_httppost *last= NULL;
-    
-    if(curl) {
-        curl_formadd(&post, &last, CURLFORM_COPYNAME, "file", CURLFORM_FILE, (const char *)fileNameWExt.c_str(), CURLFORM_END);
-        curl_formadd(&post, &last, CURLFORM_COPYNAME, "name", CURLFORM_COPYCONTENTS, (const char *)fileName.c_str(), CURLFORM_END);
-        
-        curl_easy_setopt(curl, CURLOPT_URL, PADSettings::instance().getImageUploadURL().c_str());
-        curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
-        
-        res = curl_easy_perform(curl);
-        curl_formfree(post);
-    }
-    
-    curl_easy_cleanup(curl);
 }

@@ -7,7 +7,7 @@
 //
 
 #include "DBManager.hpp"
-#import "PADSettings.hpp"
+#include <mysql.h>
 
 static u_int totalROIs = 0;
 

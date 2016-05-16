@@ -7,6 +7,8 @@
 //
 
 #include "ROIUtils.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 void ROIUtils::drawROIsOnImage(vector<ROI> rois, Mat &image) {
     for(int i = 0; i < rois.size(); i++) {

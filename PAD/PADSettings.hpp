@@ -9,8 +9,6 @@
 #ifndef PADSETTINGS_H
 #define PADSETTINGS_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 #include "tinyxml2.h"
 

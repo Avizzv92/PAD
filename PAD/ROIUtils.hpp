@@ -6,11 +6,7 @@
 //  Copyright © 2016 ESIGELEC-IS. All rights reserved.
 //
 
-#include <iostream>
 #include <opencv/cv.h>
-#include <opencv/highgui.h>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 #include "PADSettings.hpp"
 
 using namespace cv;
@@ -20,6 +16,8 @@ using namespace std;
 #define EMPTY -1
 #define OCCUPIED 1
 
+#ifndef ROI_hpp
+#define ROI_hpp
 class ROI {
     private:
         int occupationOverTime[FRAMES_TO_AVG] = { [0 ... FRAMES_TO_AVG-1] = EMPTY };//Keeps track of occupation over N number of frames.
@@ -69,7 +67,10 @@ class ROI {
     }
     
 };
+#endif
 
+#ifndef ROIUtils_hpp
+#define ROIUtils_hpp
 class ROIUtils {
 public:
     //Draws ROIs as polygons on the image.
@@ -86,3 +87,5 @@ private:
     //Add a label to display the coverage percentage for a given ROI
     static void addLabel(cv::Mat& image, const ROI &roi);
 };
+#endif
+

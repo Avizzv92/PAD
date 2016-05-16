@@ -5,10 +5,10 @@
 //  Created by Aaron Vizzini & Wu Weibo on 20/03/2016.
 //
 
+#ifndef EDGEDETECT_hpp
+#define EDGEDETECT_hpp
+
 #include <opencv/cv.h>
-#include <opencv/highgui.h>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 
 using namespace cv;
 using namespace std;
@@ -21,6 +21,10 @@ private:
     static void equalizeHistogram(Mat &image);
     
 public:
+    //Unused
     static void sobelEdgeDetect (Mat &image);
+    //Canny Edge Detection for occupancy detection
     static void cannyEdgeDetect (Mat &image);
 };
+
+#endif
