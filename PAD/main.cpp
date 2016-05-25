@@ -97,7 +97,7 @@ int main(int argc, const char * argv[]) {
             
             Logger::handleLogging(dbm, originalFrame+roisOverlay, CAMERA_ID, PARKING_LOT_ID, rois);//Handle the logging aspect (We want to show the user the original colored image + the overlayed ROIs
             
-            imshow("window", videoFrame);
+            imshow("Parking Availability Detection", videoFrame);
             
         } catch (Exception& e) {
             const char* err_msg = e.what();

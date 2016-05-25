@@ -41,7 +41,6 @@ void Logger::handleLogging(DBManager &dbm, Mat matToLog, int CAMERA_ID, int PARK
 
 void Logger::sendImageToServer(string fileName, string fileNameWExt) {
     CURL *curl = curl_easy_init();
-    CURLcode res;
     struct curl_httppost *post= NULL;
     struct curl_httppost *last= NULL;
     
@@ -52,7 +51,7 @@ void Logger::sendImageToServer(string fileName, string fileNameWExt) {
         curl_easy_setopt(curl, CURLOPT_URL, PADSettings::instance().getImageUploadURL().c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
         
-        res = curl_easy_perform(curl);
+        curl_easy_perform(curl);
         curl_formfree(post);
     }
     
