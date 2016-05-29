@@ -52,9 +52,9 @@ int main(int argc, const char * argv[]) {
     cap.open(PADSettings::instance().getVideoCaptureSource());
     
     //Create window with mouse callback
-    namedWindow("window",1);
-    setMouseCallback("window", MouseCallBack, NULL);
-
+    namedWindow("Parking Availability Detection",1);
+    setMouseCallback("Parking Availability Detection", MouseCallBack, NULL);
+    
     cap>>videoFrame;
     
     //Give this Mat an intial size equal to that of the video frame.

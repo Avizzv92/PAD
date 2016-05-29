@@ -9,7 +9,13 @@
 #include "PADSettings.hpp"
 
 PADSettings::PADSettings(void) {
-    doc.LoadFile( "settings.xml" );
+    
+    XMLError e = doc.LoadFile( "settingss.xml" );
+    if(e != 0) {
+        cout<< "Could not load the settings file. Check that the settings.xml file is located in the same directory as the executable." <<endl;
+        exit(1);
+    }
+    
 }
 
 PADSettings& PADSettings::instance()
